@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -19,11 +20,11 @@ public class CarteirasClientes {
     private Integer id_carteira;
     
     @ManyToOne
-    @Column(name = "id_cliente")
+    @JoinColumn(name = "id_cliente")
     private Clientes Clientes;
 
     @OneToMany
-    @Column(name = "id_produto")
+    @JoinColumn(name = "id_produto")
     private ProdutosInvestimento Produtos;
 
     @Column(name = "quantidade")
