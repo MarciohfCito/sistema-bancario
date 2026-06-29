@@ -6,3 +6,4 @@ import br.uema.bd.sistema_bancario.entity.CarteirasClientes;
 public interface CarteirasClientesRepository extends JpaRepository<CarteirasClientes, Integer> {
 
 }
+ 
