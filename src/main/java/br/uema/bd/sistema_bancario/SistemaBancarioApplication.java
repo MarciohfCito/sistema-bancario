@@ -1,4 +1,4 @@
-package db.uema.sistema_bancario;
+package br.uema.bd.sistema_bancario;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

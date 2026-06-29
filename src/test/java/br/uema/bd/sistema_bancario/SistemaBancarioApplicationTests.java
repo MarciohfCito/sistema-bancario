@@ -1,4 +1,4 @@
-package db.uema.sistema_bancario;
+package br.uema.bd.sistema_bancario;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
