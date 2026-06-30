@@ -1,5 +1,7 @@
 package br.uema.bd.sistema_bancario.entity;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -21,17 +22,17 @@ public class CarteirasClientes {
     
     @ManyToOne
     @JoinColumn(name = "id_cliente")
-    private Clientes Clientes;
+    private Clientes cliente;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name = "id_produto")
-    private ProdutosInvestimento Produtos;
+    private ProdutosInvestimento produto;
 
     @Column(name = "quantidade")
-    private Integer quantidade;
+    private BigDecimal quantidade;
 
     @Column(name = "valor_aplicado")
-    private Double valor_aplicado;
+    private BigDecimal valor_aplicado;
 
     public Integer getId_carteira() {
         return id_carteira;
@@ -42,34 +43,34 @@ public class CarteirasClientes {
     }
 
     public Clientes getClientes() {
-        return Clientes;
+        return cliente;
     }
 
-    public void setClientes(Clientes clientes) {
-        Clientes = clientes;
+    public void setClientes(Clientes cliente) {
+        this.cliente = cliente;
     }
 
-    public ProdutosInvestimento getProdutos() {
-        return Produtos;
+    public ProdutosInvestimento getProduto() {
+        return produto;
     }
 
-    public void setProdutos(ProdutosInvestimento produtos) {
-        Produtos = produtos;
+    public void setProduto(ProdutosInvestimento produto) {
+        this.produto = produto;
     }
 
-    public Integer getQuantidade() {
+    public BigDecimal getQuantidade() {
         return quantidade;
     }
 
-    public void setQuantidade(Integer quantidade) {
+    public void setQuantidade(BigDecimal quantidade) {
         this.quantidade = quantidade;
     }
 
-    public Double getValor_aplicado() {
+    public BigDecimal getValor_aplicado() {
         return valor_aplicado;
     }
 
-    public void setValor_aplicado(Double valor_aplicado) {
+    public void setValor_aplicado(BigDecimal valor_aplicado) {
         this.valor_aplicado = valor_aplicado;
     }
 }

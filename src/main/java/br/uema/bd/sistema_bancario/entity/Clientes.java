@@ -36,7 +36,10 @@ public class Clientes {
     private LocalDateTime dataCadastro;
 
     @OneToMany(mappedBy = "cliente")
-    private List<Contas> contas;
+    private List<Contas> conta;
+
+    @OneToMany(mappedBy = "cliente")
+    private List<CarteirasClientes> carteiras;  
 
     public Integer getIdCliente() {
         return idCliente;
@@ -103,11 +106,11 @@ public class Clientes {
     }
 
     public List<Contas> getContas() {
-        return contas;
+        return conta;
     }
 
-    public void setContas(List<Contas> contas) {
-        this.contas = contas;
+    public void setContas(List<Contas> conta) {
+        this.conta = conta;
     }
 
 }
