@@ -3,7 +3,14 @@ package br.uema.bd.sistema_bancario.entity;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "ordem_investimento")
@@ -15,11 +22,11 @@ public class OrdemInvestimento {
     private Integer idOrdem;
 
     @ManyToOne
-    @JoinColumn(name = "id_conta", nullable = false)
+    @JoinColumn(name = "id_conta")
     private Contas conta;
 
     @ManyToOne
-    @JoinColumn(name = "id_produto", nullable = false)
+    @JoinColumn(name = "id_produto")
     private ProdutosInvestimento produto;
 
     @Column(name = "tipo_ordem")
