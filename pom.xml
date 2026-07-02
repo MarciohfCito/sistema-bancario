@@ -126,7 +126,7 @@
 				<groupId>org.flywaydb</groupId>
 				<artifactId>flyway-maven-plugin</artifactId>
 				<configuration>
-					<url>jdbc:mysql://localhost:3306/banking_system?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=UTC</url>
+					<url>jdbc:mysql://localhost:3309/banking_system?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=UTC</url>
 					<user>vh</user>
 					<password>12345</password>
 					<cleanDisabled>false</cleanDisabled>
