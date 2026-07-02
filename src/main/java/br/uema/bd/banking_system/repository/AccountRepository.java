@@ -10,4 +10,5 @@ import br.uema.bd.banking_system.entity.Account;
 public interface AccountRepository extends JpaRepository<Account, Integer> {
     Optional<Account> findByAccountNumber(String accountNumber);
     List<Account> findByClientId(Integer clientId);
+    Optional<Account> findTopByOrderByAccountNumberDesc();
 }
