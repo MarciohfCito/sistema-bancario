@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: banking-system-db
+    restart: unless-stopped
+
+    environment:
+      MYSQL_DATABASE: banking_system
+      MYSQL_USER: vh
+      MYSQL_PASSWORD: 12345
+      MYSQL_ROOT_PASSWORD: root123
+
+    ports:
+      - "3309:3306"
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
