@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import br.uema.bd.banking_system.dto.LoginRequest;
 import br.uema.bd.banking_system.dto.LoginResponse;
 import br.uema.bd.banking_system.dto.RegisterRequest;
+import br.uema.bd.banking_system.entity.Account;
 import br.uema.bd.banking_system.entity.Client;
 import br.uema.bd.banking_system.exception.BusinessException;
 import br.uema.bd.banking_system.repository.ClientRepository;
@@ -26,6 +27,7 @@ public class AuthService {
     private final JwtTokenProvider tokenProvider;
     private final AuthenticationManager authenticationManager;
     private final AccountService accountService;
+    private final CardService cardService;
 
     public LoginResponse login(LoginRequest request) {
         authenticationManager.authenticate(
@@ -50,6 +52,8 @@ public class AuthService {
         }
 
         Client client = new Client();
+
+        //pega os dados do cliente do request e seta no objeto client
         client.setClientType(request.getClientType());
         client.setDocument(request.getDocument());
         client.setLegalName(request.getLegalName());
@@ -58,8 +62,13 @@ public class AuthService {
         client.setPasswordHash(passwordEncoder.encode(request.getPassword()));
         client.setCreatedAt(LocalDateTime.now());
 
+        //salva os dados do cliente no banco de dados
         Client savedClient = clientRepository.save(client);
-        accountService.createDefaultAccount(savedClient);
+
+        //cria a conta
+        Account account = accountService.createDefaultAccount(savedClient);
+
+        cardService.createDefaultCard(account);
 
         String token = tokenProvider.generateToken(
                 savedClient.getDocument(),

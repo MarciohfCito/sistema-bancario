@@ -6,6 +6,7 @@ import lombok.*;
 public class CardResponse {
     private Integer id;
     private Integer accountId;
+    private String number;
     private String printedName;
     private String expirationDate;
     private String cardType;
