@@ -15,6 +15,7 @@ import br.uema.bd.banking_system.entity.Client;
 import br.uema.bd.banking_system.exception.BusinessException;
 import br.uema.bd.banking_system.exception.ResourceNotFoundException;
 import br.uema.bd.banking_system.repository.AccountRepository;
+import br.uema.bd.banking_system.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -22,15 +23,20 @@ import lombok.RequiredArgsConstructor;
 public class AccountService {
 
     private final AccountRepository repository;
-    private final ClientService clientService;
+    private final ClientRepository clientRepository;
+
+    private Client findClientById(Integer id) {
+        return clientRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Client not found: " + id));
+    }
 
     public AccountResponse create(AccountRequest request) {
         if (repository.findByAccountNumber(request.getAccountNumber()).isPresent()) {
             throw new BusinessException("Account number already exists");
         }
 
-        Client client = clientService.findClientById(request.getClientId());
-        Account account = new Account();
+        Client client = findClientById(request.getClientId());        Account account = new Account();
         account.setClient(client);
         account.setAccountNumber(request.getAccountNumber());
         account.setBranch(request.getBranch());
@@ -57,7 +63,7 @@ public class AccountService {
             throw new BusinessException("Account number already exists");
         }
 
-        Client client = clientService.findClientById(request.getClientId());
+        Client client = findClientById(request.getClientId());
         account.setClient(client);
         account.setAccountNumber(request.getAccountNumber());
         account.setBranch(request.getBranch());
@@ -119,5 +125,47 @@ public class AccountService {
                 account.getOverdraftLimit(),
                 account.getStatus()
         );
+    }
+
+    //Gera o numero da conta automaticamente ao cadastrar o cliente
+    private String generateAccountNumber() {
+
+        return repository.findTopByOrderByAccountNumberDesc()
+                .map(account -> {
+
+                    int number = Integer.parseInt(account.getAccountNumber());
+
+                    return String.format("%06d", number + 1);
+
+                })
+                .orElse("000001");
+    }
+
+    //Gera a agencia automaticamente ao cadastrar o cliente
+    private String generateBranch() {
+        return "0001";
+    }
+
+    //Cria uma conta padrão para o cliente ao ser cadastrado
+    @Transactional
+    public Account createDefaultAccount(Client client) {
+
+        Account account = new Account();
+
+        account.setClient(client);
+
+        account.setAccountNumber(generateAccountNumber());
+
+        account.setBranch(generateBranch());
+
+        account.setAccountType("conta-corrente");
+
+        account.setBalance(BigDecimal.ZERO);
+
+        account.setOverdraftLimit(BigDecimal.ZERO);
+
+        account.setStatus("ativa");
+
+        return repository.save(account);
     }
 }

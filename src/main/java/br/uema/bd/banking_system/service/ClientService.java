@@ -12,6 +12,7 @@ import br.uema.bd.banking_system.entity.Client;
 import br.uema.bd.banking_system.exception.BusinessException;
 import br.uema.bd.banking_system.exception.ResourceNotFoundException;
 import br.uema.bd.banking_system.repository.ClientRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -20,7 +21,9 @@ public class ClientService {
 
     private final ClientRepository repository;
     private final PasswordEncoder passwordEncoder;
+    private final AccountService accountService;
 
+    @Transactional
     public ClientResponse create(ClientRequest request) {
         if (repository.existsByDocument(request.getDocument())) {
             throw new BusinessException("Document already registered");
@@ -38,7 +41,11 @@ public class ClientService {
         client.setPasswordHash(passwordEncoder.encode(request.getPassword()));
         client.setCreatedAt(LocalDateTime.now());
 
-        return toResponse(repository.save(client));
+        Client savedClient = repository.save(client);
+
+        accountService.createDefaultAccount(savedClient);
+
+        return toResponse(savedClient);
     }
 
     public List<ClientResponse> findAll() {

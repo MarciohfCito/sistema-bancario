@@ -14,6 +14,7 @@ import br.uema.bd.banking_system.entity.Client;
 import br.uema.bd.banking_system.exception.BusinessException;
 import br.uema.bd.banking_system.repository.ClientRepository;
 import br.uema.bd.banking_system.security.JwtTokenProvider;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -24,6 +25,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider tokenProvider;
     private final AuthenticationManager authenticationManager;
+    private final AccountService accountService;
 
     public LoginResponse login(LoginRequest request) {
         authenticationManager.authenticate(
@@ -38,6 +40,7 @@ public class AuthService {
         return new LoginResponse(token, client.getClientType(), client.getId(), client.getLegalName());
     }
 
+    @Transactional
     public LoginResponse register(RegisterRequest request) {
         if (clientRepository.existsByDocument(request.getDocument())) {
             throw new BusinessException("Document already registered");
@@ -55,9 +58,19 @@ public class AuthService {
         client.setPasswordHash(passwordEncoder.encode(request.getPassword()));
         client.setCreatedAt(LocalDateTime.now());
 
-        clientRepository.save(client);
+        Client savedClient = clientRepository.save(client);
+        accountService.createDefaultAccount(savedClient);
 
-        String token = tokenProvider.generateToken(client.getDocument(), client.getId());
-        return new LoginResponse(token, client.getClientType(), client.getId(), client.getLegalName());
+        String token = tokenProvider.generateToken(
+                savedClient.getDocument(),
+                savedClient.getId()
+        );
+
+        return new LoginResponse(
+                token,
+                savedClient.getClientType(),
+                savedClient.getId(),
+                savedClient.getLegalName()
+        );
     }
 }
