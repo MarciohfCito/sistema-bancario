@@ -97,74 +97,74 @@ investimentos.
 
 ## Entidades
 
-1.  CLIENTES
-2.  CONTAS
-3.  CARTOES
-4.  TRANSACOES
-5.  CHAVES_PIX
-6.  PRODUTOS_INVESTIMENTO
-7.  CARTEIRAS_CLIENTES
-8.  ORDEM_INVESTIMENTO
+1.  CLIENTS
+2.  ACCOUNTS
+3.  CARDS
+4.  TRANSACTIONS
+5.  PIX_KEYS
+6.  INVESTMENT_PRODUCTS
+7.  CLIENT_WALLETS
+8.  INVESTMENT_ORDERS
 
 ## Relacionamentos
 
-CLIENTE 1:N CONTAS
+CLIENT 1:N ACCOUNTS
 
-CONTAS 1:N CARTOES
+ACCOUNTS 1:N CARDS
 
-CONTAS 1:N CHAVES_PIX
+ACCOUNTS 1:N PIX_KEYS
 
-CONTAS 1:N TRANSACOES (origem)
+ACCOUNTS 1:N TRANSACTIONS (source)
 
-CONTAS 1:N TRANSACOES (destino)
+ACCOUNTS 1:N TRANSACTIONS (destination)
 
-CLIENTES 1:N CARTEIRAS_CLIENTES
+CLIENTS 1:N CLIENT_WALLETS
 
-PRODUTOS_INVESTIMENTO 1:N CARTEIRAS_CLIENTES
+INVESTMENT_PRODUCTS 1:N CLIENT_WALLETS
 
-CONTAS 1:N ORDEM_INVESTIMENTO
+ACCOUNTS 1:N INVESTMENT_ORDERS
 
-PRODUTOS_INVESTIMENTO 1:N ORDEM_INVESTIMENTO
+INVESTMENT_PRODUCTS 1:N INVESTMENT_ORDERS
 
 # Estrutura Esperada das Tabelas
 
-## clientes
+## clients
 
-id_cliente PK tipo_cliente documento UNIQUE nome_razao email UNIQUE
-telefone senha_hash data_cadastro
+id PK client_type document UNIQUE legal_name email UNIQUE phone
+password_hash created_at
 
-## contas
+## accounts
 
-id_conta PK id_cliente FK numero_conta UNIQUE agencia tipo_conta saldo
-limite_especial status
+id PK client_id FK account_number UNIQUE branch account_type balance
+overdraft_limit status
 
-## cartoes
+## cards
 
-id_cartao PK id_conta FK numero_hash nome_impresso data_validade
-cvv_hash tipo_cartao status
+id PK account_id FK number_hash printed_name expiration_date
+cvv_hash card_type status
 
-## transacoes
+## transactions
 
-id_transacao PK id_conta_origem FK id_conta_destino FK valor
-tipo_transacao data_hora status
+id PK source_account_id FK destination_account_id FK amount
+transaction_type timestamp status
 
-## chaves_pix
+## pix_keys
 
-id_chave PK id_conta FK tipo_chave valor_chave UNIQUE
+id PK account_id FK key_type key_value UNIQUE
 
-## produtos_investimento
+## investment_products
 
-id_produto PK nome_produto tipo_ativo emissor indexador_taxa
-data_vencimento status
+id PK product_name asset_type issuer rate_index
+maturity_date status
 
-## carteiras_clientes
+## client_wallets
 
-id_carteira PK id_cliente FK id_produto FK quantidade valor_aplicado
+id PK client_id FK product_id FK quantity invested_amount
 
-## ordem_investimento
+## investment_orders
 
-id_ordem PK id_conta FK id_produto FK tipo_ordem quantidade valor_total
-data_solicitacao status
+id PK account_id FK product_id FK order_type quantity total_amount
+request_date status
 
 # Regras de Negócio
 
